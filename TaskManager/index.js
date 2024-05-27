@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 require("./src/DB/connection");
 
-const userRouter = require('./routes/user')
-const taskRouter = require('./routes/task')
-
-const jwt = require('jsonwebtoken')
+const userRouter = require('./src/routes/user')
+const taskRouter = require('./src/routes/task')
 
 const port = process.env.PORT || 3002;
 

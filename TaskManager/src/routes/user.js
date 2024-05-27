@@ -2,6 +2,8 @@ const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
+const auth = require('../middleware/auth')
+
 const userRouter = new express.Router();
 
 userRouter.post("/users", async (req, res) => {
@@ -30,13 +32,8 @@ userRouter.post("/users", async (req, res) => {
     });
 });
 
-userRouter.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    if (users) res.status(200).send(users);
-  } catch (err) {
-    res.status(400).send("Couldn't find users");
-  }
+userRouter.get("/users/me", auth, async (req, res) => {
+  res.status(200).send(req.user)
 });
 
 userRouter.patch("/users/:id", async (req, res) => {
@@ -80,5 +77,18 @@ userRouter.post("/users/login", async (req, res) => {
     res.status(400).send();
   }
 });
+
+userRouter.post('/users/logout', auth, async (req, res)=>{
+  try {
+      req.user.tokens = req.user.tokens.filter(token=>{
+        return token.token !== req.token
+      })
+
+      await req.user.save()
+      res.status(200).send()
+  }catch(err){
+      res.status(500).send()
+  }
+})
 
 module.exports = userRouter;
