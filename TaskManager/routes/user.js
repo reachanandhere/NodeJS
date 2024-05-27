@@ -17,8 +17,13 @@ userRouter.post("/users", async (req, res) => {
   const user = new User(userObj);
   user
     .save()
-    .then(() => {
-      res.status(200).send("user Saved");
+    .then(async () => {
+      const token = await user.generateAuthToken();
+
+      res.status(200).send({
+        user,
+        token,
+      });
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -59,15 +64,21 @@ userRouter.patch("/users/:id", async (req, res) => {
   }
 });
 
+userRouter.post("/users/login", async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
 
-userRouter.post('/users/login',async(req, res)=>{
-    try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
-        res.status(200).send(user)
-    } catch(err){
-        res.status(400).send()
-    }
-})
-
+    res.status(200).send({
+      user,
+      token,
+    });
+  } catch (err) {
+    res.status(400).send();
+  }
+});
 
 module.exports = userRouter;
