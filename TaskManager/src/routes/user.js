@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 
 const auth = require('../middleware/auth')
 
+const multer = require('multer')
+
 const userRouter = new express.Router();
 
 userRouter.post("/users", async (req, res) => {
@@ -90,5 +92,32 @@ userRouter.post('/users/logout', auth, async (req, res)=>{
       res.status(500).send()
   }
 })
+
+
+
+const upload =  multer({
+
+  limits: {
+    fileSize: 2000000
+  },
+  fileFilter(req, file, cb){
+    if(!file.originalname.match(/\.(doc|docx|pdf|jpg|JPG|jpeg)$/)){
+      return cb('Please upload a correct file.')
+    }
+    cb(undefined, true)
+    // cb(new Error('File type not supported'))
+    // cb(undefined, true)
+    // cb(undefined, false)
+  }
+})
+
+
+userRouter.post('/users/upload',auth, upload.single('upload'), async(req,res)=>{
+  req.user.avatar = req.file.buffer 
+  await req.user.save()
+  
+  res.send(200)
+})
+
 
 module.exports = userRouter;
