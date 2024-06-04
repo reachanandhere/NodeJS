@@ -1,0 +1,56 @@
+button {
+    padding: 10px;
+    background-color: cadetblue;
+    color: white;
+    margin: 0 5px;
+    cursor: pointer;
+   
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    width: 75%;
+}
+
+div {
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.chat {
+    display: flex;
+    width: 100%;
+    height: 90vh;
+}
+
+.sidebar {
+    width: 25%;
+    background-color: cadetblue;
+}
+
+.main-content {
+    width: 75%;
+}
+
+.chat_messages {
+    height: 80vh;
+}
+
+span {
+    font-weight: 400;
+    color: gray;
+}
+
+.centered-form {
+    text-align: center;
+    width: 100%;
+    height: 98vh;
+    background-color: cadetblue;
+
+}
+
+.centered-form__box {
+    padding-top: 15%;
+   
+}
